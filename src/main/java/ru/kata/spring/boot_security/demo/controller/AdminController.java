@@ -21,7 +21,6 @@ public class AdminController {
 
     private final UserServiceImpl userService;
     private final RoleServiceImpl roleService;
-    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
     @PostConstruct
@@ -42,7 +41,8 @@ public class AdminController {
     }
 
     @GetMapping("/admin/user-save")
-    public String saveUserForm(User user) {
+    public String saveUserForm(Model model) {
+        model.addAttribute("user", new User());
         return "admin-save";
     }
 

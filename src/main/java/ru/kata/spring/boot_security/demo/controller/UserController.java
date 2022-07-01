@@ -39,29 +39,9 @@ public class UserController {
         userService.updateUser(user);
         return "redirect:/user";
     }
+
+    @GetMapping("/news")
+    public String updateUsers() {
+        return "/news";
+    }
 }
-
-
-
-
-
-
-
-
-
-
-//user.setRoles(roleService.getRoleByName(roles.stream().toArray(String[]::new)));
-//    @PostMapping("/user/user-update")
-//    public String updateUsers(@ModelAttribute("user") User user, Principal principal) {
-////        Role role = roleService.getRoleByUsername(userRepository.findByUsername(principal.getName()));
-//        User user1 = userService.findUserById(userService.getUsernameById(principal.getName()));
-//        Set<Role> role = user1.getRoles();
-//        System.out.println(role);
-//        String roles = role.toString();
-////        if (user.getRoles() == null) {
-//        user.setRoles(roleService.getRoleByName(new String[role]));
-////            user.setRoles(roleService.getRoleByName(new String[]{"ROLE_USER"}));
-////        }
-//        userService.saveUser(user);
-//        return "redirect:/user";
-//    }
