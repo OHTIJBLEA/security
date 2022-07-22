@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
-import javax.annotation.PostConstruct;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -20,17 +16,8 @@ public class AdminController {
 
     private final UserServiceImpl userService;
     private final RoleServiceImpl roleService;
-    private final RoleRepository roleRepository;
 
-    @PostConstruct
-    public void addTestUsers() {
-        roleRepository.save(new Role(1L, "ROLE_ADMIN"));
-        roleRepository.save(new Role(2L, "ROLE_USER"));
-        User newAdmin = new User("admin", "admin", roleService.getRoleByName(new String[]{"ROLE_ADMIN"}));
-        userService.saveUserTest(newAdmin);
-        User newUser = new User("user", "user", roleService.getRoleByName(new String[]{"ROLE_USER"}));
-        userService.saveUserTest(newUser);
-    }
+
 
     @GetMapping("/admin")
     public String showAllUsers(Model model) {

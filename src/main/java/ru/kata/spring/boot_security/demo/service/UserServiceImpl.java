@@ -8,9 +8,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,8 @@ import java.util.Set;
 public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final RoleRepository roleRepository;
+
 
     public User findUsersById(Long id) {
         return userRepository.getOne(id);
@@ -109,5 +113,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             user.setRoles(Collections.singleton(new Role(2L)));
         }
         return user;
+    }
+
+    @PostConstruct
+    public void addTestUsers() {
+        roleRepository.save(new Role(1L, "ROLE_ADMIN"));
+        roleRepository.save(new Role(2L, "ROLE_USER"));
+        User newAdmin = new User("admin", "admin", roleService.getRoleByName(new String[]{"ROLE_ADMIN"}));
+        saveUserTest(newAdmin);
+        User newUser = new User("user", "user", roleService.getRoleByName(new String[]{"ROLE_USER"}));
+        saveUserTest(newUser);
     }
 }
