@@ -15,4 +15,5 @@ public interface UserService {
     Long getUsernameByName(String name);
     User getUserAndRoles(User user, String[] roles);
     User getNotNullRole(User user);
+    void addTestUsers();
 }
