@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
@@ -35,46 +34,41 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String showAllUsers(Model model) {
-        List<User> user = userService.findAll();
+        List<User> user = userService.findAllUsers();
         model.addAttribute("allUser", user);
         return "admin";
     }
 
     @GetMapping("/admin/user-save")
     public String saveUserForm(Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", new User());
         return "admin-save";
     }
 
     @PostMapping("/admin/user-save")
     public String saveUser(User user) {
-        if (user.getRoles() == null) {
-            user.setRoles(Collections.singleton(new Role(2L)));
-        }
+        userService.getNotNullRole(user);
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/admin/user-delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteById(id);
+        userService.deleteUserById(id);
         return "redirect:/admin";
     }
 
     @GetMapping("/admin/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("roles", roleService.gelAllRoles());
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("user", userService.findUserById(id));
         return "admin-update";
     }
 
     @PostMapping("/admin/user-update")
     public String updateUsers(@ModelAttribute("user") User user, @RequestParam(value = "nameRoles", required = false) String[] roles) {
-        if (roles == null) {
-            user.setRoles(roleService.getRoleByName(new String[]{"ROLE_USER"}));
-        } else {
-            user.setRoles(roleService.getRoleByName(roles));
-        }
+        userService.getUserAndRoles(user, roles);
         userService.updateUser(user);
         return "redirect:/admin";
     }

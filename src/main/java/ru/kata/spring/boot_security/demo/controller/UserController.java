@@ -8,6 +8,7 @@ import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+
 import java.security.Principal;
 import java.util.Set;
 
@@ -15,7 +16,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl userService;
-    private final RoleServiceImpl roleService;
 
     @GetMapping("/user")
     public String showUser(Principal principal, Model model) {
@@ -27,21 +27,19 @@ public class UserController {
 
     @GetMapping("/user/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userService.findUserById(id));
         return "user-update";
     }
 
     @PostMapping("/user/user-update")
     public String updateUsers(@ModelAttribute("user") User user, Principal principal) {
-        User userDb = userService.findUserById(userService.getUsernameByName(principal.getName()));
-        Set<Role> roles = userDb.getRoles();
-        user.setRoles(roleService.getRoleByName(roles.stream().map(role-> role.getName()).toArray(String[]::new)));
+        userService.getUserForUpdateUsers(user, principal.getName());
         userService.updateUser(user);
         return "redirect:/user";
     }
 
     @GetMapping("/news")
-    public String updateUsers() {
+    public String showNews() {
         return "/news";
     }
 }

@@ -12,8 +12,17 @@
     <label for="password">Password: </label>
     <input type="text" th:field="*{password}" id="password">
     <br>
-
+    <select name="nameRoles" multiple size="2">
+        <option th:each="role : ${roles}"
+                th:value="${role.name}"
+                th:text="${role.getName()}">
+        </option>
+    </select>
+    <br>
     <input type="submit" value="Create user">
+
 </form>
+
+
 </body>
 </html>

@@ -15,7 +15,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public Set<Role> gelAllRoles() {
+    public Set<Role> getAllRoles() {
         return new HashSet<>(roleRepository.findAll());
     }
 
@@ -23,7 +23,7 @@ public class RoleServiceImpl implements RoleService {
     public Set<Role> getRoleByName(String[] roleName) {
         Set<Role> roleSet = new HashSet<>();
         for (String role : roleName) {
-            roleSet.add(roleRepository.findByName(role));
+            roleSet.add(roleRepository.findRoleByName(role));
         }
         return roleSet;
     }
